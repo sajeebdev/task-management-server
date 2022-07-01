@@ -29,6 +29,7 @@ async function run(){
     try{
         await client.connect();
         const alltask =client.db("taskmanasment").collection("task");
+        const completetask =client.db("completetask").collection("complete");
     //get my task
         app.get('/task', async(req,res)=>{
             const result = await alltask.find().toArray();
@@ -61,6 +62,33 @@ async function run(){
         const id = req.params.id;
        
         const result = await alltask.deleteOne({ _id: ObjectId(id) });
+        res.send(result);
+        });
+        //complate 
+        app.put("/complete/:id", async (req, res) => {
+            const id = req.params.id;
+            const service = req.body;
+      
+            const result = await completetask.updateOne(
+              { _id: ObjectId(id) }, // Find Data by query many time query type is "_id: id" Cheack on database
+              {
+                $set: service, // Set updated Data
+              },
+              { upsert: true } // define work
+            );
+            res.send({ result });
+          });
+          //get complate
+          app.get('/complete', async(req,res)=>{
+            const result = await completetask.find().toArray();
+            res.send(result);
+
+        })
+        //complete delete 
+        
+       app.delete("/completedelete/:id", async (req, res) => {
+        const id = req.params.id;
+        const result = await completetask.deleteOne({ _id: ObjectId(id) });
         res.send(result);
         });
     }
