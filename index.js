@@ -44,7 +44,7 @@ async function run(){
     //ubdate
     app.patch("/updatetask/:id", async (req, res) => {
         const id = req.params.id;
-       
+      
         const data = req.body;
         const result = await alltask.updateOne(
         {_id:ObjectId(id)}, // sometime _id:ObjectId(id)
